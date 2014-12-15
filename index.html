@@ -53,7 +53,7 @@
 		app.controller = function(){
 
 
-			this.paginate = new paginate.controller(options)
+			this.paginate = new mpaginate.controller(options)
 		
 		}
 
@@ -61,7 +61,7 @@
 		/* View */
 		app.view = function(ctrl){
 			return [
-				paginate.view(ctrl.paginate)
+				mpaginate.view(ctrl.paginate)
 			]			
 		}
 

@@ -1,6 +1,6 @@
 /* Module */
 
-var paginate = (function(app){
+var mpaginate = (function(app){
 
 	var defaultOptions = {
 		perPage: 10,
@@ -142,4 +142,4 @@ var paginate = (function(app){
 
 	return app;
 
-})(paginate || {});
+})(mpaginate || {});

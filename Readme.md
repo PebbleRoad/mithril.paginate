@@ -4,27 +4,40 @@ A small pagination module for mithril. Pass in an array of items and it paginate
 
 ## How to use
 
+	// Mock some data
+	var items = [];
+
+	for (var i = 0; i<15; i++) {
+	    items.push({'name':'Item #'+i})
+	}
+
 	/**
 	 * Your Module
 	 */
-	
+
 	var app = {},
 		options = {
-			perPage: 10
+			perPage: 5,				
+			data: items
 		};
 
 	/* Controller */
-	app.controller = function(){			
+	app.controller = function(){
 
-		this.items = new paginate.controller(items, options)			
+
+		this.paginate = new mpaginate.controller(options)
 
 	}
+
 
 	/* View */
 	app.view = function(ctrl){
-
-		return paginate.view(ctrl.items);
+		return [
+			mpaginate.view(ctrl.paginate)
+		]			
 	}
+
+
 
 	/* Initialize the app */
 
@@ -35,7 +48,8 @@ A small pagination module for mithril. Pass in an array of items and it paginate
 
 	{
 		perPage: 10,
-		page: 1
+		page: 1,
+		data: Array
 	}
 
 ## Todo
