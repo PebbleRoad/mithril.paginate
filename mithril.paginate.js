@@ -27,21 +27,25 @@ var paginate = (function(app){
 	 * Controller
 	 * @return {[type]} [description]
 	 */
-	app.controller = function(items, options){
-
+	app.controller = function(options){
+		
+		
 		/* Extend options */
 
 		var options = extend(defaultOptions, options);
 
 		this.perPage = m.prop(options.perPage)
-		this.page    = m.prop(options.page - 1)
-		this.items   = m.prop(items);
-
-		/**
-		 * Total pages
-		 */
 		
-		this.totalPages = m.prop(Math.ceil(items.length/this.perPage()))
+		this.page    = m.prop(options.page - 1);
+
+		
+		/* Items */
+
+		this.items = m.prop(options.data || []);
+
+		/* Total pages */
+
+		this.totalPages = m.prop(Math.ceil(this.items().length/this.perPage()))
 
 		/**
 		 * Page list
@@ -103,13 +107,14 @@ var paginate = (function(app){
 	 * View
 	 * @return {[type]} [description]
 	 */
-	app.view = function(ctrl){		
+	app.view = function(ctrl){
+		
 		return [
 			m('ul.items', [
 				ctrl.items()
 				.slice(ctrl.page() * ctrl.perPage(), (parseInt(ctrl.page()) + 1) * ctrl.perPage())
 				.map(function(item){
-					return m('li', item.Name)
+					return m('li', item.name)
 				})
 			]),
 
@@ -120,9 +125,9 @@ var paginate = (function(app){
 				}, 'Previous page'),
 				ctrl.pageList().map(function(page){					
 					return m('a', {
-						onclick     : m.withAttr('data-page', ctrl.page),
-						href        : '#',
-						"data-page" : page
+						onclick     : m.withAttr('data-page', ctrl.page),						
+						"data-page" : page,
+						class: page == ctrl.page()? 'page-current': ''
 					}, page + 1)
 				}),
 				m('a', {
@@ -137,5 +142,4 @@ var paginate = (function(app){
 
 	return app;
 
-})(paginate || {})
-
+})(paginate || {});

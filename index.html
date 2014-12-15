@@ -3,6 +3,23 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Mithril paginate</title>
+	<style>
+		.pages a{
+			display: inline-block;
+			padding: 5px;
+			-webkit-user-select: none;
+			cursor: pointer;
+		}
+
+		.page-current{
+			background: #000;
+			color: #fff;
+		}
+
+		.disabled{
+			opacity: 0.1;
+		}
+	</style>
 </head>
 <body>
 	
@@ -18,31 +35,37 @@
 		// Mock some data
 		var items = [];
 
-		for (var i = 0; i<151; i++) {
-		    items.push({'Name':'Item #'+i})
+		for (var i = 0; i<15; i++) {
+		    items.push({'name':'Item #'+i})
 		}
-
+		
 		/**
 		 * Your Module
 		 */
 		
 		var app = {},
 			options = {
-				perPage: 10
+				perPage: 5,				
+				data: items
 			};
 
 		/* Controller */
-		app.controller = function(){			
+		app.controller = function(){
 
-			this.items = new paginate.controller(items, options)			
 
+			this.paginate = new paginate.controller(options)
+		
 		}
+
 
 		/* View */
 		app.view = function(ctrl){
-
-			return paginate.view(ctrl.items);
+			return [
+				paginate.view(ctrl.paginate)
+			]			
 		}
+
+		
 
 		/* Initialize the app */
 
