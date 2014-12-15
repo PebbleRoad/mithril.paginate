@@ -8,20 +8,20 @@ var paginate = (function(app){
 	}
 
 	/**
-     * Extend
-     */    
-    var extend = function(obj, extObj) {
-        if (arguments.length > 2) {
-            for (var a = 1; a < arguments.length; a++) {
-                extend(obj, arguments[a]);
-            }
-        } else {
-            for (var i in extObj) {
-                obj[i] = extObj[i];
-            }
-        }
-        return obj;
-    };
+	 * Extend
+	 */    
+	var extend = function(obj, extObj) {
+			if (arguments.length > 2) {
+					for (var a = 1; a < arguments.length; a++) {
+							extend(obj, arguments[a]);
+					}
+			} else {
+					for (var i in extObj) {
+							obj[i] = extObj[i];
+					}
+			}
+			return obj;
+	};
 
 	/**
 	 * Controller
@@ -105,7 +105,7 @@ var paginate = (function(app){
 	 */
 	app.view = function(ctrl){		
 		return [
-			m('ul', [
+			m('ul.items', [
 				ctrl.items()
 				.slice(ctrl.page() * ctrl.perPage(), (parseInt(ctrl.page()) + 1) * ctrl.perPage())
 				.map(function(item){

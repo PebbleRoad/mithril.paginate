@@ -37,3 +37,8 @@ A small pagination module for mithril. Pass in an array of items and it paginate
 		perPage: 10,
 		page: 1
 	}
+
+## Todo
+
+1. Support Async loading of items
+2. Support large sets of items
