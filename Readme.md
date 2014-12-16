@@ -17,8 +17,11 @@ A small pagination module for mithril. Pass in an array of items and it paginate
 
 	var app = {},
 		options = {
-			perPage: 5,				
-			data: items
+			perPage  : 5,				
+			data     : items,
+			limit    : 10,		
+			ellipsis : '&hellip;',
+			edges    : 2
 		};
 
 	/* Controller */
@@ -47,12 +50,15 @@ A small pagination module for mithril. Pass in an array of items and it paginate
 ## Options
 
 	{
-		perPage: 10,
-		page: 1,
-		data: Array
+		perPage  : 10,
+		page     : 1,
+		data     : Array,
+		limit    : 10 // Page number limit when should ellipsis text be display
+		ellipsis : '&hellip;',
+		edges    : 2 // Number of pages before and after the current page
 	}
 
 ## Todo
 
 1. Support Async loading of items
-2. Support large sets of items
+2. Support large sets of items - Done

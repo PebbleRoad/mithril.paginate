@@ -3,8 +3,11 @@
 var mpaginate = (function(app){
 
 	var defaultOptions = {
-		perPage: 10,
-		page: 1
+		perPage  : 10,
+		page     : 1,
+		limit    : 10,		
+		ellipsis : '&hellip;',
+		edges    : 2 
 	}
 
 	/**
@@ -32,36 +35,54 @@ var mpaginate = (function(app){
 		
 		/* Extend options */
 
-		var options = extend(defaultOptions, options);
+		this.options = extend(defaultOptions, options);
 
-		this.perPage = m.prop(options.perPage)
+		this.perPage = m.prop(this.options.perPage)
 		
-		this.page    = m.prop(options.page - 1);
+		this.page    = m.prop(this.options.page - 1);
 
 		
 		/* Items */
 
-		this.items = m.prop(options.data || []);
+		this.items = m.prop(this.options.data || []);
 
 		/* Total pages */
 
 		this.totalPages = m.prop(Math.ceil(this.items().length/this.perPage()))
 
+
 		/**
 		 * Page list
 		 */
 		
-		this.pageList = function(){
+		this.pageList = function(){			
 
-			var p = [];
+			var p = [],
+				start = 0,
+				end = this.totalPages(),
+				left = Math.max(parseInt(this.page()) - this.options.edges, 0),
+				right = Math.min(parseInt(this.page()) + this.options.edges, this.totalPages())
+			
+			for(var i = start; i < end; i ++){
+				
+				if(	i == 0 
+					|| i == parseInt(this.totalPages()) - 1 
+					|| this.totalPages() < this.options.limit){
 
-			for(var i = 0; i < this.totalPages(); i ++){
-				p.push(i)
+					p.push(i)
+
+				} else{
+
+					if(i == (right + 1) || i == (left - 1)) p.push(this.options.ellipsis)
+
+					if( i <= right && i >= left) p.push(i)
+				}
 			}
 
 			return p;
 
 		}.bind(this)
+
 
 
 		/**
@@ -79,7 +100,6 @@ var mpaginate = (function(app){
 			}
 
 			this.page(current)
-
 
 		}.bind(this)
 
@@ -101,14 +121,32 @@ var mpaginate = (function(app){
 
 
 		}.bind(this)
+
+
+		/**
+		 * Change perPage
+		 */
+		
+		this.changePerPage = function(value){
+			
+			this.perPage(value)
+
+			/* Recalculate total pages */
+
+			this.totalPages(Math.ceil(this.items().length/this.perPage()))
+
+			/* Jump to page 1 */
+
+			this.page(0);
+
+		}.bind(this)
 	}
 
 	/**
 	 * View
 	 * @return {[type]} [description]
 	 */
-	app.view = function(ctrl){
-		
+	app.view = function(ctrl){		
 		return [
 			m('ul.items', [
 				ctrl.items()
@@ -123,17 +161,37 @@ var mpaginate = (function(app){
 					onclick: ctrl.prevPage,
 					class: ctrl.page() == 0? 'disabled': ''
 				}, 'Previous page'),
-				ctrl.pageList().map(function(page){					
-					return m('a', {
-						onclick     : m.withAttr('data-page', ctrl.page),						
-						"data-page" : page,
-						class: page == ctrl.page()? 'page-current': ''
-					}, page + 1)
+				ctrl.pageList().map(function(page){
+					
+					switch(page){
+						
+						case ctrl.options.ellipsis:
+							return m('span.page-ellipsis', m.trust(page))
+							break;
+
+						default:
+							return m('a', {
+								onclick     : m.withAttr('data-page', ctrl.page),						
+								'data-page' : page,
+								className: page == ctrl.page()? 'page-current': ''
+							}, parseInt(page) + 1)
+							break;
+
+					}
+					
 				}),
 				m('a', {
 					onclick: ctrl.nextPage,
 					class: ctrl.page() == (ctrl.totalPages() - 1)? 'disabled': ''
 				}, 'Next page'),
+			]),
+			m('label', 'Per page: '),
+			m('select', {
+				onchange: m.withAttr('value', ctrl.changePerPage)
+			}, [
+				m('option', 5),
+				m('option', 10),
+				m('option', 15)
 			])
 		]
 
