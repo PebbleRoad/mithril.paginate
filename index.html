@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mithril paginate</title>
+	<style>
+		.pages a{
+			display: inline-block;
+			padding: 5px;
+			-webkit-user-select: none;
+			cursor: pointer;
+		}
+
+		.page-current{
+			background: #000;
+			color: #fff;
+		}
+
+		.disabled{
+			opacity: 0.1;
+		}
+	</style>
+</head>
+<body>
+	
+	
+	<div id="paginate">
+		
+	</div>
+	
+	<script src="bower_components/mithril/mithril.min.js"></script>
+	<script src="mithril.paginate.js"></script>
+	<script>
+
+		// Mock some data
+		var items = [];
+
+		for (var i = 0; i<105; i++) {
+		    items.push({'name':'Item #'+i})
+		}
+		
+		/**
+		 * Your Module
+		 */
+		
+		var app = {},
+			options = {
+				perPage: 5,				
+				data: items
+			};
+
+		/* Controller */
+		app.controller = function(){
+
+
+			this.paginate = new mpaginate.controller(options)
+		
+		}
+
+
+		/* View */
+		app.view = function(ctrl){
+			return [
+				mpaginate.view(ctrl.paginate)
+			]			
+		}
+
+		
+
+		/* Initialize the app */
+
+		m.module(document.getElementById('paginate'), app)
+	</script>
+</body>
+</html>
